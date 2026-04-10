@@ -1,48 +1,32 @@
-print("Добро пожаловать в приложение 'сундукивмореискатор(сонар)'")
+import pygame
+pygame.init()
 
-import random
+window = pygame.display.set_mode((500,500))
+pygame.display.set_caption("Моя игра")
+window.fill("blue")
 
-cells = []
-lines = [[], [], [], [], [],[], [], [], [], []]
-x_chests = []
-y_chests = []
+tnr = pygame.font.SysFont("Times New Roman",50)
 
-def field():
-  for i in range(10):
-    for j in range(10):
-      lines[i].append('~ ')
+message = tnr.render("Привет, Олег",1,"red","yellow")
+window.blit(message,(20,20))
+hel = pygame.font.SysFont("Helvetica",50)
 
-def output():
-  num = 0
-  print('  0 1 2 3 4 5 6 7 8 9')
-  for i in lines:
-    cells = ''
-    for j in i:
-      cells += j
-    print(num, cells)
-    num += 1
+message = hel.render("Привет, Олег",1,"red","yellow")
+window.blit(message,(20,80))
+arial = pygame.font.SysFont("Arial",50)
 
-def chests():
-  for i in range(3):
-    x_chests.append(random.randint(0, 9))
-    y_chests.append(random.randint(0, 9))
+message = arial.render("Привет, Олег",1,"red","yellow")
+window.blit(message,(20,130))
+calibri = pygame.font.SysFont("Calibri",50)
 
-field()
-chests()
-output()
-
-score = 0
-while score < 3:
-  x = int(input('введите координату x:\t'))
-  y = int(input('введите координату y:\t'))
-  lines[y][x] = 'x '
-  for i in range(0, 3, 1):
-    if x == x_chests[i] and y == y_chests[i]:
-      lines[y][x] = '1 '
-      score += 1
-      print('вы нашли', score, 'сундуков.')
-    elif x == x_chests[i]:
-      lines[y][x] = str(abs(y - y_chests[i])) + ' '
-    elif y == y_chests[i]:
-      lines[y][x] = str(abs(x - x_chests[i])) + ' '
-  output()
+message = calibri.render("Привет, Олег",1,"red","yellow")
+window.blit(message,(20,180))
+# pygame.draw.line(window,"white",[0,500],[500,0],2)
+# pygame.draw.rect(window,"white",[100,80,50,20])
+# pygame.draw.circle(window,"white",[400,400],50)
+# pygame.draw.polygon(window,"white",[[50,30],[100,20],[120,50],[180,30],[50,50]])
+pygame.display.update()
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
