@@ -1,104 +1,57 @@
+import time
 
+food = 10
+mood = 100
+energy = 100
+leaved = True
+print("Добро пожаловать в Тамагочи")
+print("Это твой питомец")
+name = input("Введите имя для питомца: ")
+last_time = time.time()
 
-import pygame
-from random import randrange
-
-#размер окна:
-A = 500
-#шаг змейки
-size = 50
-#координаты головы змейки
-x = randrange(0, A, size)
-y = randrange(0, A, size)
-#координаты яблока
-xapple = randrange(0, A, size)
-yapple = randrange(0, A, size)
-#частота смены кадров
-fps = 5
-#начальное направление
-dx = 0
-dy = 0
-#разрешаем движение во всех направлениях
-UP = True
-DOWN = True
-RIGHT = True
-LEFT = True
-#список координат змейки:
-snake = [(x, y)]
-#длина змейки:
-length = 1
-
-#инициализируем библиотеку:
-pygame.init()
-#вызов окна:
-win = pygame.display.set_mode((A, A)) 
-#даём окну название:
-pygame.display.set_caption("Змейка")
-#объект для регулирования скорости змейки
-clock = pygame.time.Clock()
-
-#основной цикл:
-while True:
-  clock.tick(fps)
-#закрашиваем фон
-  win.fill(pygame.Color('blue'))
-#рисуем змейку, состоящую из зелёных квадратов
-  for i, j in snake:
-    pygame.draw.rect(win, 'green', (i, j, size, size))
-#рисуем красное яблоко
-  pygame.draw.rect(win, 'red', (xapple, yapple, size, size))
-#обновляем экран
-  pygame.display.update()
-#проверка на закрытие приложения
-  for event in pygame.event.get():
-    if event.type == pygame.QUIT:
-      exit()
-#управление змейкой
-  key = pygame.key.get_pressed()
-  if key[pygame.K_UP] and UP:
-    dx = 0
-    dy = -1
-    UP = True
-    DOWN = False
-    RIGHT = True
-    LEFT = True
-  if key[pygame.K_DOWN] and DOWN:
-    dx = 0
-    dy = 1
-    UP = False
-    DOWN = True
-    RIGHT = True
-    LEFT = True
-  if key[pygame.K_RIGHT] and RIGHT:
-    dx = 1
-    dy = 0
-    UP = True
-    DOWN = True
-    RIGHT = True
-    LEFT = False
-  if key[pygame.K_LEFT] and LEFT:
-    dx = -1
-    dy = 0
-    UP = True
-    DOWN = True
-    RIGHT = False
-    LEFT = True
-  x += dx * size
-  y += dy * size
-  #добавляем каждый шаг змейки в её список координат
-  snake.append((x, y))
-  #срез координат в соответствии с длиной змейки
-  snake = snake[-length:]
-
-    #змейка ест яблоко
-  if snake[-1] == (xapple, yapple):
-    xapple = randrange(0, A, size)
-    yapple = randrange(0, A, size)
-    length += 1
-    fps += 0.5
-
-      #условие проигрыша
-  if x < 0 or x > A or y < 0 or y > A:
-    break
-  if len(snake) != len(set(snake)):
-    break
+while leaved == True:
+    current_time = time.time()
+    if current_time - last_time >= 60:
+        minutes = (current_time - last_time) // 60
+        print("Прошло",minutes,"минут, питомец проголодался и устал")
+        food += 10*minutes
+        mood -= 10*minutes
+        energy -= 15*minutes
+        last_time = current_time
+    print("Состояние питомца:")
+    print("Голод:",food)
+    print("Настроение:",mood)
+    print("Энергия:",energy)
+    print("\\n--- Меню ---")
+    print("1. Покормить (+30 сытости, +10 настроения)")
+    print("2. Поиграть (+20 настроения, -20 энергии)")
+    print("3. Уложить спать (Энергия +100, Голод +10)")
+    print("4. Проверить состояние")
+    choice = input("Выбери действие (1-4): ")
+    if choice == "1":
+        print("Ты покормил питомца")
+        food = max(0,food - 30)
+        mood = min(100,mood + 10)
+    elif choice == "2":
+        if energy > 0:
+            print("Вы поиграли с питомцем")
+            mood = min(100,mood+20)
+            energy = max(0,energy - 20)
+        else:
+            print("Питомец слишком устал для игр")
+    elif choice == "3":
+        print("Питомец поспал")
+        energy  = 100
+        food = max(0,food + 10)
+    elif choice == "4":
+        print("Состояние питомца:")
+        print("Голод:",food)
+        print("Настроение:",mood)
+        print("Энергия:",energy)
+    else:
+        print("Такого действия нет")
+    if mood <= 0 or food >= 100:
+        print("Питомец сбежал")
+        leaved = False
+        time.sleep(2)
+print("Спасибо за игру")
