@@ -11,7 +11,13 @@ y_apple = random.randrange(0,A,size)
 screen = pygame.display.set_mode((A,A))
 pygame.display.set_caption("Змейка")
 FPS = 3
-
+up = True
+down = True
+left = True
+right = True
+dx = 0
+dy = 0
+length = 1
 clock = pygame.time.Clock()
 snake = [(x,y)]
 
@@ -25,8 +31,38 @@ while True:
 
   pygame.display.update()
   key = pygame.key.get_pressed()
-  if key[pygame.K_UP]:
-       pass # ВОТ ТУТ ОСТАНОВИЛИСЬ!!!!!!!!! TO DO!!!!!!
+  if key[pygame.K_UP] and up == True:
+       dx = 0
+       dy = -1
+       up = True
+       down = False
+       left = True
+       right = True
+  if key[pygame.K_DOWN] and down == True:
+         dx = 0
+         dy = 1
+         up = False
+         down = True
+         left = True
+         right = True
+  if key[pygame.K_RIGHT] and right == True:
+         dx = 1
+         dy = 0
+         up = True
+         down = True
+         left = False
+         right = True
+  if key[pygame.K_LEFT] and left == True:
+         dx = -1
+         dy = 0
+         up = True
+         down = True
+         left = True
+         right = False
+  x += dx * size
+  y += dy * size
+  snake.append((x,y))
+  snake = snake[-length:]
   
   for event in pygame.event.get():
           if event.type == pygame.QUIT:
