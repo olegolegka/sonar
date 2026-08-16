@@ -63,7 +63,16 @@ while True:
   y += dy * size
   snake.append((x,y))
   snake = snake[-length:]
-  
+
+  if snake[-1] == (x_apple, y_apple):
+     x_apple = random.randrange(0,A,size)
+     y_apple = random.randrange(0,A,size)
+     length += 1
+     FPS += 1
+  if x < 0 or x > A or y < 0 or y > A:
+       break
+  if len(snake) != len(set(snake)): 
+       break
   for event in pygame.event.get():
           if event.type == pygame.QUIT:
               pygame.quit()
