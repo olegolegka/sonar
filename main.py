@@ -1,11 +1,20 @@
-import telebot
+local event = game.ReplicatedStorage.ShootEvent
+local bullet = game.ReplicatedStorage.Bullet
+local speed = 50
+local debris = game:GetService("Debris")
 
-bot = telebot.TeleBot(token,parse_mode=None)
-
-@bot.message_handler(commands = ["start","help"])
-def start_handler(message):
-    bot.reply_to(message,"Привет, я твой новый телеграмм бот")
-    print(message.text)
-
-
-bot.infinity_polling()
+event.OnServerEvent:Connect(function(player,mousepos,muzzelpos)
+	local bulletclone = bullet:Clone()
+	bulletclone.Parent = workspace
+	bulletclone.CFrame = CFrame.lookAt(muzzelpos,mousepos)
+	local direction = (mousepos - muzzelpos).Unit
+	local velocity = bulletclone.LinearVelocity
+	velocity.VectorVelocity = direction * speed
+	bulletclone.Touched:Connect(function(hit)
+		if hit.Parent:FindFirstChild("Humanoid") then
+			hit.Parent:FindFirstChild("Humanoid"):TakeDamage(25)
+		end
+		bulletclone:Destroy()
+	end)
+	debris:AddItem(bulletclone,5)
+end)
